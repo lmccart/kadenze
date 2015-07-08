@@ -1,36 +1,48 @@
-var brickWidth = 40;
-var brickHeight = 15;
-var cols = 20;
-var rows = 24;
-var columnOffset = 60;
-var rowOffset = 30;
-var rotationIncrement = 0.15;
+var t0;
+var t1;
+var max_dist;
 
 function setup() {
-  createCanvas(1200, 768);
-  background(255);
-  smooth();
-  noFill();
-  stroke(0);
-  noLoop();
+  createCanvas(windowWidth, windowHeight);
+  background(0);
+  noStroke();
+  max_dist = dist(0, 0, windowWidth, windowHeight);
+  t0 = new Thing(random(width), random(height));
+  t1 = new Thing(random(width), random(height));
 }
 
+
 function draw() {
-  translate(30, 30);
-  for (var i=0; i<cols; i++) {
-    push();
-    translate(i * columnOffset, 0);
-    var r = random(-QUARTER_PI, QUARTER_PI);
-    var dir = 1;
-    for (var j=0; j<rows; j++) {
-      push();
-      translate(0, rowOffset * j);
-      rotate(r);
-      rect(-brickWidth/2, -brickHeight/2, brickWidth, brickHeight);
-      pop();
-      r += dir * rotationIncrement;
-      if (r > QUARTER_PI || r < -QUARTER_PI) dir *= -1;
+  background(0, 50);
+  t0.move();
+  t1.blink();
+  t1.move();
+  t0.display();
+  t1.display();
+}
+
+function Thing(x, y) {
+  this.x = x;
+  this.y = y;
+
+  this.display = function() {
+    for(var i = 0; i <= windowWidth; i += 50) {
+      for(var j = 0; j <= windowHeight; j += 50) {
+        var size = max_dist/dist(this.x, this.y, i, j);
+        ellipse(i, j, size, size);
+      }
     }
-    pop();
+  };
+
+  this.move = function() {
+    this.y += 1;
+    if (this.y > windowHeight + 200) {
+      this.y = -200;
+      this.x = random(width);
+    }
+  }
+
+  this.blink = function() {
+    this.max_size = cos(frameCount*0.01)*1;
   }
 }

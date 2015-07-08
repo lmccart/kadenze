@@ -1,36 +1,39 @@
-var brickWidth = 40;
-var brickHeight = 15;
-var cols = 20;
-var rows = 24;
-var columnOffset = 60;
-var rowOffset = 30;
-var rotationIncrement = 0.15;
+var sw = 1;
 
 function setup() {
-  createCanvas(1200, 768);
-  background(50);
-  smooth();
-  noFill();
-  stroke(0);
-  noLoop();
+  createCanvas(windowWidth, windowHeight);
+  strokeWeight(sw);
 }
 
 function draw() {
-  translate(30, 30);
-  for (var i=0; i<cols; i++) {
-    push();
-    translate(i * columnOffset, 0);
-    var r = random(-QUARTER_PI, QUARTER_PI);
-    var dir = 1;
-    for (var j=0; j<rows; j++) {
+  background(204);
+
+  for (var i=0; i<width; i+=150) {
+    for (var j=0; j<height; j+=150) {
+      
       push();
-      translate(0, rowOffset * j);
-      rotate(r);
-      rect(-brickWidth/2, -brickHeight/2, brickWidth, brickHeight);
+      translate(i, j);  
+      strokeWeight(sw);
+
+      if (keyIsPressed) {
+        stroke(255);
+      } else {
+        stroke(0);
+      }
+      line(60, 0, mouseX, mouseY+ random(-2, 2)); // White line
+
+      if (keyIsPressed) {
+        stroke(0);
+      } else {
+        stroke(255);
+      }
+      var mx = map(mouseX, 0, width, 0, width/2);
+      line(60, 0, mx + random(-2, 2), mouseY); // Black line
       pop();
-      r += dir * rotationIncrement;
-      if (r > QUARTER_PI || r < -QUARTER_PI) dir *= -1;
     }
-    pop();
   }
+}
+
+function mousePressed() {
+  sw+=5;
 }

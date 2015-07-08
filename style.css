@@ -16,6 +16,15 @@ body {
   padding: 3px 5px;
 }
 
-#src a {
+a {
   text-decoration: none;
+  color: #ED225D;
+}
+
+a:hover {
+  color: #2D7BB6;
+}
+
+a.todo {
+  color: #DFDFDF;
 }
