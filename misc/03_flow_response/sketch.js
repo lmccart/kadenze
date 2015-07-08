@@ -8,7 +8,7 @@ var rotationIncrement = 0.15;
 
 function setup() {
   createCanvas(1200, 768);
-  background(255);
+  background(50);
   smooth();
   noFill();
   stroke(0);
