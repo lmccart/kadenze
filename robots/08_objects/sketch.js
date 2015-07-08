@@ -1,36 +1,48 @@
-var brickWidth = 40;
-var brickHeight = 15;
-var cols = 20;
-var rows = 24;
-var columnOffset = 60;
-var rowOffset = 30;
-var rotationIncrement = 0.15;
+var img1;
+var img2;
+
+var bot1;
+var bot2;
+
+function preload() {
+  img1 = loadImage("../assets/robot1.svg");
+  img2 = loadImage("../assets/robot2.svg");
+}
 
 function setup() {
-  createCanvas(1200, 768);
-  background(255);
-  smooth();
-  noFill();
-  stroke(0);
-  noLoop();
+  createCanvas(720, 480);
+  bot1 = new Robot(img1, 90, 80);
+  bot2 = new Robot(img2, 440, 30);
 }
 
 function draw() {
-  translate(30, 30);
-  for (var i=0; i<cols; i++) {
-    push();
-    translate(i * columnOffset, 0);
-    var r = random(-QUARTER_PI, QUARTER_PI);
-    var dir = 1;
-    for (var j=0; j<rows; j++) {
-      push();
-      translate(0, rowOffset * j);
-      rotate(r);
-      rect(-brickWidth/2, -brickHeight/2, brickWidth, brickHeight);
-      pop();
-      r += dir * rotationIncrement;
-      if (r > QUARTER_PI || r < -QUARTER_PI) dir *= -1;
-    }
-    pop();
+  background(204);
+
+  // Update and display first robot
+  bot1.update();
+  bot1.display();
+
+  // Update and display second robot
+  bot2.update();
+  bot2.display();
+}
+
+function Robot(img, tempX, tempY) {  
+  // Set initial values for properties
+  this.xpos = tempX;
+  this.ypos = tempY;
+  this.angle = random(0, TWO_PI);
+  this.botImage = img;
+  this.yoffset = 0.0;
+
+  // Update the properties
+  this.update = function() {
+    this.angle += 0.05;
+    this.yoffset = sin(this.angle) * 20;
+  }
+
+  // Draw the robot to the screen
+  this.display = function() {
+    image(this.botImage, this.xpos, this.ypos + this.yoffset);
   }
 }

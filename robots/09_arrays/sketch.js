@@ -1,36 +1,50 @@
-var brickWidth = 40;
-var brickHeight = 15;
-var cols = 20;
-var rows = 24;
-var columnOffset = 60;
-var rowOffset = 30;
-var rotationIncrement = 0.15;
+var robotImage;
+var bots = [];  // Declare array to hold Robot objects
+
+function preload() {
+  robotImage = loadImage("../assets/robot1.svg");
+}
 
 function setup() {
-  createCanvas(1200, 768);
-  background(255);
-  smooth();
-  noFill();
-  stroke(0);
-  noLoop();
+  createCanvas(720, 480);
+
+  var numRobots = 20;
+
+  // Create each object
+  for (var i = 0; i < numRobots; i++) {
+    // Create a random x-coordinate
+    var x = random(-40, width-40);
+    // Assign the y-coordinate based on the order
+    var y = map(i, 0, numRobots, -100, height-200);
+    bots[i] = new Robot(robotImage, x, y);
+  }
 }
 
 function draw() {
-  translate(30, 30);
-  for (var i=0; i<cols; i++) {
-    push();
-    translate(i * columnOffset, 0);
-    var r = random(-QUARTER_PI, QUARTER_PI);
-    var dir = 1;
-    for (var j=0; j<rows; j++) {
-      push();
-      translate(0, rowOffset * j);
-      rotate(r);
-      rect(-brickWidth/2, -brickHeight/2, brickWidth, brickHeight);
-      pop();
-      r += dir * rotationIncrement;
-      if (r > QUARTER_PI || r < -QUARTER_PI) dir *= -1;
-    }
-    pop();
+  background(204);
+  // Update and display each bot in the array
+  for (var i = 0; i < bots.length; i++) {
+    bots[i].update();
+    bots[i].display();
+  }
+}
+
+function Robot(img, tempX, tempY) {
+  // Set initial values for properties
+  this.xpos = tempX;
+  this.ypos = tempY;
+  this.angle = random(0, TWO_PI);
+  this.botImage = img;
+  this.yoffset = 0.0;
+
+ // Update the properties
+  this.update = function() {
+    this.angle += 0.05;
+    this.yoffset = sin(this.angle) * 20;
+  }
+
+  // Draw the robot to the screen
+  this.display = function() {
+    image(this.botImage, this.xpos, this.ypos + this.yoffset);
   }
 }
