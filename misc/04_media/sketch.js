@@ -7,17 +7,19 @@ function preload() {
 
 function setup() {
   createCanvas(720, 400);
-  smallPoint = 4;
+  smallPoint = 10;
   largePoint = 40;
   noStroke();
   image(img, 0, 0);
+  //background(255, 100);
 }
 
 function draw() {
-  var pointillize = map(mouseX, 0, width, smallPoint, largePoint);
-  var x = floor(random(img.width));
-  var y = floor(random(img.height));
+  var diff = abs(pmouseX - mouseX);
+  var pointillize = constrain(map(diff, 0, 50, smallPoint, largePoint), smallPoint, largePoint);
+  var x = floor(mouseX + random(-30, 30));
+  var y = floor(mouseY + random(-30, 30));
   var pix = img.get(x, y);
-  fill(pix, 128);
+  fill(pix);
   ellipse(x, y, pointillize, pointillize);
 }
