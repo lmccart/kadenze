@@ -1,40 +1,77 @@
+var dotSize = 9;
+var angleOffsetA;
+var angleOffsetB;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(windowWidth, windowHeight); 
+  noStroke();
   fill(0);
-  stroke(0);
+  //frameRate(1);  // Redraw the tree once a second
   noLoop();
+  
+  angleOffsetA = radians(1.5); // Convert 1.5 degrees to radians
+  angleOffsetB = radians(50);  // Convert 50 degrees to radians
 }
 
 function draw() {
-  drawThing(random(width), random(height));
-
+  background(255);                     // White background
+  seed1(dotSize, radians(270), width/2, height);  // Start the tree
 }
-
-function drawThing(x, y) {
-  var s = random(10, 100);
-
-  stroke(30, 30, 210, 75);
-  for (var i=0; i<7; i++) {
-    strokeWeight(random(5, 10))
-    line(x, y, x+random(-s, s), y+random(-s, s));
-  }
-
-  stroke(0, 150);
-  for (var i=0; i<30; i++) {
-    strokeWeight(random(1, 3))
-    line(x, y, x+random(-s, s), y+random(-s, s));
-  }
-
-  stroke(255, 150);
-  for (var i=0; i<10; i++) {
-    strokeWeight(random(1, 3))
-    line(x, y, x+random(-s, s), y+random(-s, s));
-  }
-}
-
 
 function mousePressed() {
-  background(255, 5);
-  drawThing(mouseX, mouseY);
+  background(255, 45);
+  seed1(dotSize, radians(270), mouseX, height);  // Start the tree
+}
+
+function seed1(dotSize, angle, x, y) {
+  
+  if (dotSize > 1.0) {
+    
+    // Create a random numbers between 0 and 1
+    var r = random(0, 1.0);  
+    
+    // 98% chance this will happen
+    if (r > 0.02) {  
+      ellipse(x, y, dotSize, dotSize);
+      var newx = x + cos(angle) * dotSize;
+      var newy = y + sin(angle) * dotSize;
+      seed1(dotSize * 0.99, angle - angleOffsetA, newx, newy);   
+    }
+    // 02% chance this will happen
+    else {  
+      ellipse(x, y, dotSize, dotSize);
+      var newx = x + cos(angle);
+      var newy = y + sin(angle);
+      seed2(dotSize * 0.99, angle + angleOffsetA, newx, newy);
+      seed1(dotSize * 0.60, angle + angleOffsetB, newx, newy);
+      seed2(dotSize * 0.50, angle - angleOffsetB, newx, newy);
+    } 
+  }
+}
+
+
+function seed2(dotSize, angle, x, y) {
+  
+  if (dotSize > 1.0) {
+    
+    // Create a random numbers between 0 and 1
+    var r = random(0, 1.0);
+    
+    // 95% chance this will happen
+    if (r > 0.05) {
+      ellipse(x, y, dotSize, dotSize);
+      var newx = x + cos(angle) * dotSize;
+      var newy = y + sin(angle) * dotSize;
+      seed2(dotSize * 0.99, angle + angleOffsetA, newx, newy);
+    } 
+    // 05% chance this will happen
+    else {
+      ellipse(x, y, dotSize, dotSize);
+      var newx = x + cos(angle);
+      var newy = y + sin(angle);
+      seed1(dotSize * 0.99, angle + angleOffsetA, newx, newy);  
+      seed2(dotSize * 0.60, angle + angleOffsetB, newx, newy);
+      seed1(dotSize * 0.50, angle - angleOffsetB, newx, newy);
+    }
+  }
 }
