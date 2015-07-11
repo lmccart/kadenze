@@ -36,12 +36,14 @@ function nextImg() {
 }
 
 function keyPressed() {
-  nextImg();
+  if (key === ' ') {
+    nextImg();
+  }
 }
 
 function draw() {
 
-  var mx = constrain(mouseX, center - thumb_w/2, center + thumb_w/2);
+  var mx = constrain(mouseX, center - thumb_w/2+1, center + thumb_w/2);
   var x = map(mx, center - thumb_w/2, center + thumb_w/2, imgs[cur].width, 0);
 
   for (var y=0; y<height; y++){
@@ -49,16 +51,17 @@ function draw() {
     set(draw_position_x, y, c);
   }
   updatePixels();
+
+  // show thumbnail
+  image(imgs[cur], mx, height-thumb_h/2, thumb_w, thumb_h);
+  line(width/2, height-thumb_h, width/2, height);
+
   
   // loop back around
   draw_position_x++;
   if (draw_position_x >= width) {
     draw_position_x = 0;
   }
-
-  // show thumbnail
-  image(imgs[cur], mx, height-thumb_h/2, thumb_w, thumb_h);
-  line(width/2, height-thumb_h, width/2, height);
 }
 
   
