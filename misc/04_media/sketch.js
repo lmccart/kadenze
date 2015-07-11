@@ -1,53 +1,64 @@
+var thumb_h = 200;
+var thumb_w;
+var draw_position_x = 0; 
+var center;
 
-var img;
-var values = [];
-var angle;
+var files = ['../assets/horse.jpg', '../assets/monkey.jpg', '../assets/camel.jpg'];
+var imgs = [];
+var cur = 0;
 
 function preload() {
-  img = loadImage("../assets/nasa-iceberg.jpg");
+  for (var i=0; i<files.length; i++) {
+    imgs.push(loadImage(files[i]));
+  }
 }
 
 function setup() {
-  createCanvas(1024, 768);
-  noFill();
+  createCanvas(windowWidth, windowHeight);
+  imageMode(CENTER);
+  background(0);
+  center = width/2;
+  for (var i=0; i<imgs.length; i++) {
+    imgs[i].loadPixels();
+  }
+  loadPixels();
+  nextImg();
+  stroke(255, 255, 0);
+}
 
-  for (var i=0; i<img.height; i++) {
-    values[i] = [];
+function nextImg() {
+  cur++;
+  if (cur >= imgs.length) {
+    cur = 0;
   }
-  
-  // Extract the brightness of each pixel in the image
-  // and store in the "values" array
-  img.loadPixels();
-  for (var i = 0; i < img.height; i++) {
-    for (var j = 0; j < img.width; j++) {
-      var pix = img.get(i, j);
-      values[j][i] = int(brightness(pix));
-    }
-  }
+  thumb_w = thumb_h*imgs[cur].width/imgs[cur].height;
+  draw_position_x = 0;
+}
+
+function keyPressed() {
+  nextImg();
 }
 
 function draw() {
-  
-  background(0);                     // Set black background
-  translate(width/2, height/2, 0);   // Move to the center
-  //scale(4.0);                        // Scale to 400%
-  
-  // Update the angle
-  angle += 0.005;
-  rotateY(angle);  
-  
-  // Display the image mass
-  for (var i = 0; i < img.height; i += 2) {
-    for (var j = 0; j < img.width; j += 2) {
-      stroke(values[j][i], 153);
-      var x1 = j-img.width/2;
-      var y1 = i-img.height/2;
-      var z1 = -values[j][i]/2;
-      var x2 = j-img.width/2;
-      var y2 = i-img.height/2;
-      var z2 = -values[j][i]/2-4;
-      line(x1, y1, z1, x2, y2, z2);
-    }
+
+  var mx = constrain(mouseX, center - thumb_w/2, center + thumb_w/2);
+  var x = map(mx, center - thumb_w/2, center + thumb_w/2, imgs[cur].width, 0);
+
+  for (var y=0; y<height; y++){
+    var c = imgs[cur].get(x, y);
+    set(draw_position_x, y, c);
   }
+  updatePixels();
+  
+  // loop back around
+  draw_position_x++;
+  if (draw_position_x >= width) {
+    draw_position_x = 0;
+  }
+
+  // show thumbnail
+  image(imgs[cur], mx, height-thumb_h/2, thumb_w, thumb_h);
+  line(width/2, height-thumb_h, width/2, height);
 }
+
   
