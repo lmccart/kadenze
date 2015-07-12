@@ -1,13 +1,16 @@
 var brickWidth = 40;
 var brickHeight = 15;
-var cols = 30;
-var rows = 50;
 var columnOffset = 60;
 var rowOffset = 30;
 var rotationIncrement = 0.15;
+var cols;
+var rows;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  cols = floor(width / columnOffset);
+  rows = floor(height / rowOffset);
+
   background(0);
   smooth();
   fill(255);
