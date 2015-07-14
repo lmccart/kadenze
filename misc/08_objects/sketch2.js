@@ -1,5 +1,4 @@
 
-var m = 2;
 var n1 = 18;
 var n2 = 10;
 var n3 = 100;
@@ -32,6 +31,10 @@ function draw() {
 function Thing(x, y) { 
   this.x = x;
   this.y = y;
+  this.m = floor(random(2, 15));
+  this.n1 = floor(random(1, 100));
+  this.n2 = floor(random(1, 100));
+  this.n3 = floor(random(1, 100));
   this.xspeed = random(-3, 3);
   this.yspeed = random(-3, 3);
   this.scaler = random(50, 200);
@@ -47,10 +50,10 @@ function Thing(x, y) {
     for (var s = 16; s > 0; s--) {  
       beginShape();
     
-      var mm = m + s;
-      var nn1 = n1 + s;
-      var nn2 = n2 + s;
-      var nn3 = n3 + s;
+      var mm = this.m + s;
+      var nn1 = this.n1 + s;
+      var nn2 = this.n2 + s;
+      var nn3 = this.n3 + s;
       newscaler = newscaler * 0.98;
       var sscaler = newscaler;
 
