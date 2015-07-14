@@ -1,26 +1,41 @@
+var draw_position_x = 0; 
 
-var img;
-var smallPoint, largePoint;
-
-function preload() {
-  img = loadImage("../assets/moonwalk.jpg");
-}
+var cur = 0;
+var cam;
 
 function setup() {
-  createCanvas(720, 400);
-  smallPoint = 10;
-  largePoint = 40;
-  noStroke();
-  image(img, 0, 0);
-  //background(255, 100);
+  devicePixelScaling(false)
+  var c = createCanvas(windowWidth, windowHeight);
+  c.translate(100, 100)
+  imageMode(CENTER);
+  background(0);
+  cam = createCapture(VIDEO);
+  //cam.loadPixels();
+  loadPixels();
+  stroke(255, 255, 0);
+  //frameRate(3)
 }
 
 function draw() {
-  var diff = abs(pmouseX - mouseX);
-  var pointillize = constrain(map(diff, 0, 50, smallPoint, largePoint), smallPoint, largePoint);
-  var x = floor(mouseX + random(-30, 30));
-  var y = floor(mouseY + random(-30, 30));
-  var pix = img.get(x, y);
-  fill(pix);
-  ellipse(x, y, pointillize, pointillize);
+
+  if (cam) {
+    cam.loadPixels();
+
+    for (var y=0; y<height; y++){
+      var r = cam.pixels[4*(y*cam.width+cam.width/2)];
+      var g = cam.pixels[4*(y*cam.width+cam.width/2)+1];
+      var b = cam.pixels[4*(y*cam.width+cam.width/2)+2];
+      var a = cam.pixels[4*(y*cam.width+cam.width/2)+3];
+      set(draw_position_x, y, [r, g, b, a]);
+    }
+    updatePixels();
+
+    // loop back around
+    draw_position_x++;
+    if (draw_position_x >= width) {
+      draw_position_x = 0;
+    }
+  }
 }
+
+  

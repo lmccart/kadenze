@@ -3,7 +3,7 @@ var thumb_w;
 var draw_position_x = 0; 
 var center;
 
-var files = ['../assets/horse.jpg', '../assets/monkey.jpg', '../assets/ballerina.jpg', '../assets/camel.jpg'];
+var files = ['../assets/horse.jpg', '../assets/ballerina.jpg', '../assets/monkey.jpg', '../assets/camel.jpg'];
 var imgs = [];
 var cur = 0;
 
@@ -14,6 +14,7 @@ function preload() {
 }
 
 function setup() {
+  //devicePixelScaling(false);
   createCanvas(windowWidth, windowHeight);
   imageMode(CENTER);
   background(0);
@@ -44,11 +45,16 @@ function keyPressed() {
 function draw() {
 
   var mx = constrain(mouseX, center - thumb_w/2+1, center + thumb_w/2);
-  var x = map(mx, center - thumb_w/2, center + thumb_w/2, imgs[cur].width, 0);
+  var x = floor(map(mx, center - thumb_w/2, center + thumb_w/2, imgs[cur].width, 0));
 
   for (var y=0; y<height; y++){
     var c = imgs[cur].get(x, y);
-    set(draw_position_x, y, c);
+      // var r = imgs[cur].pixels[4*(y*imgs[cur].width+x)];
+      // var g = imgs[cur].pixels[4*(y*imgs[cur].width+x)+1];
+      // var b = imgs[cur].pixels[4*(y*imgs[cur].width+x)+2];
+      // var a = imgs[cur].pixels[4*(y*imgs[cur].width+x)+3];
+
+    set(draw_position_x, y, c);//[r, g, b, a]);
   }
   updatePixels();
 
