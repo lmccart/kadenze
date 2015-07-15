@@ -1,53 +1,43 @@
 var angle = 0.0;
-var speed = 0.01;
-
-var d = 20;
-
-var n0 = 5;
-var n1 = 10;
-var n2 = 3;
-
-var r0 = 100;
-var r1 = 50;
-var r2 = 30;
-
+var scalar = 50;
+var speed = 0.005;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  //fill(0);
+  //strokeWeight(20);
   noFill();
 }
 
 function draw() {
 
-  r0 = floor(map(mouseX, 0, width, 10, 300));
-  r1 = floor(map(mouseY, 0, height, 10, 300));
+  var l0 = map(mouseX, 0, width, 10, 300);
+  var l1 = map(mouseY, 0, height, 10, 300);
 
   background(255);
 
   translate(width/2, height/2);
   rotate(angle);
-
-  for (var i=0; i<n0; i++) {
+  //line(0, 0, 0, l0);
+  for (var i=0; i<5; i++) {
     push();
-    rotate(i*TWO_PI/n0);
-    translate(0, r0);
-    ellipse(0, 0, d, d);
+    rotate(i*TWO_PI/5);
+    translate(0, l0);
+    ellipse(0, 0, 20, 20);
 
-
-    for (var j=0; j<n1; j++) {
+    rotate(angle);
+    for (var j=0; j<5; j++) {
       push();
-      rotate(j*TWO_PI/n1);
-      translate(r1, 0);
-      ellipse(0, 0, d, d);
+      rotate(j*TWO_PI/5);
+      translate(0, l1);
+      ellipse(0, 0, 20, 20);
 
-      translate(0, 50);
       rotate(angle);
-
-      for (var k=0; k<n2; k++) {
+      for (var k=0; k<5; k++) {
         push();
-        rotate(k*TWO_PI/n2);
-        translate(r2, 0);
-        ellipse(0, 0, d, d);
+        rotate(k*TWO_PI/5);
+        translate(0, 50);
+        ellipse(0, 0, 20, 20);
         pop();
       }
       pop();
@@ -57,12 +47,4 @@ function draw() {
 
   angle += speed;
 
-}
-
-function keyPressed() {
-  if (key === ' ') {
-    n0 = floor(random(3, 10));
-    n1 = floor(random(3, 10));
-    n2 = floor(random(3, 10));
-  }
 }
