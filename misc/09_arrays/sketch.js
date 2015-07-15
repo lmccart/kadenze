@@ -65,7 +65,6 @@ function Particle(l) {
   // draw particle
   this.draw = function() {
     fill(255,50);
-    this.drawArrowHead(this.vel,this.loc,10);
     noFill();
     // draw history path
     stroke(255, 100);
@@ -78,29 +77,4 @@ function Particle(l) {
   }
   
   
-   this.drawArrowHead = function(v, loc, scale) {
-    push();
-    var arrowsize = 8;
-    // Translate to location to render vector
-    translate(loc.x, loc.y);
-    
-    // rotate to heading
-    rotate(v.heading());
-
-    // Calculate length of vector & scale it to be bigger or smaller if necessary
-    var len = v.mag()*scale;
-    arrowsize = map(len, 0, 10, 0, 1) * arrowsize;
-
-    // Draw point
-    stroke(255, 100);
-    fill(255, 100);
-    line(0,0,len-arrowsize,0);
-    noStroke();
-    beginShape();
-    vertex(len,0);
-    vertex(len-arrowsize,+arrowsize/2);
-    vertex(len-arrowsize,-arrowsize/2);
-    endShape(CLOSE);
-    pop();
-  }
 }
