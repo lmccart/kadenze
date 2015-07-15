@@ -1,11 +1,8 @@
 var angle = 0.0;
-var scalar = 50;
 var speed = 0.005;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  //fill(0);
-  //strokeWeight(20);
   noFill();
 }
 
@@ -18,7 +15,6 @@ function draw() {
 
   translate(width/2, height/2);
   rotate(angle);
-  //line(0, 0, 0, l0);
   for (var i=0; i<5; i++) {
     push();
     rotate(i*TWO_PI/5);
