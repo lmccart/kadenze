@@ -1,106 +1,50 @@
-var particles = [];
-var n = 300;
 
-function setup() {
+  
+var spacing = 50; // number of cells
+var bd = 50; // base line length
+var sp = 0.004; // rotation speed step
+var sl = .97; // slow down rate
+ 
+var all = [];
+ 
+function det(x1, y1, x2, y2, x3, y3) {
+  return ((x2-x1)*(y3-y1) - (x3-x1)*(y2-y1));
+}
+ 
+function Cell(x, y) {
+  this.x=x;
+  this.y=y;
+  this.s = 0; // spin velocity
+  this.c = 0; // current angle
+  
+  this.sense = function() {
+    if(pmouseX != 0 || pmouseY != 0)
+      this.s += sp * det(this.x, this.y, pmouseX, pmouseY, mouseX, mouseY) / (dist(this.x, this.y, mouseX, mouseY) + 1);
+    this.s *= sl;
+    this.c += this.s;
+    var d = bd * this.s + .001;
+    line(this.x, this.y, this.x + d * cos(this.c), this.y + d * sin(this.c));
+  };
+}
+ 
+function setup(){
   createCanvas(windowWidth, windowHeight);
-  background(0);
-  
-  // create particles
-  for (var i = 0; i < n; i++) {
-    particles[i] = new Particle(new p5.Vector(100, height-100));
-  }
-  strokeWeight(1)
+  stroke(0);
+  for(var x = 0; x < width; x+= spacing)
+    for(var y = 0; y < height; y+= spacing)
+      all.push(new Cell(x, y));
 }
-
+ 
 function draw() {
-  background(0, 7);
-  // draw the particles
-  for (var i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].draw();
+  background(255);
+  translate(spacing / 2, spacing / 2);
+  for(var i=0; i<all.length; i++) {
+    all[i].sense();
   }
 }
-
-
-
-// ---------------
-// Particle.pde
-// Based on the Particle class from: http://www.shiffman.net/teaching/nature/particles/
-// ---------------
-function Particle(l) {
-  this.counter = 0;
-  this.randmin = -HALF_PI;
-  this.randmax = 0;
-
-    
-  this.r = random(0, TWO_PI);
-  this.x = cos(this.r);
-  this.y = sin(this.r);
-  this.acc = new p5.Vector(this.x / 250, this.y / 250);
-
-  this.q = random(0, 1);
-  this.r = random(this.randmin, this.randmax);
-  this.x = cos(this.r) * this.q;
-  this.y = sin(this.r) * this.q;
-  this.vel = new p5.Vector(this.x, this.y);
-  this.loc = l.copy();    
-  this.hist = [];
-
-
-
-  // update location
-  this.update = function() {
-    this.vel.add(this.acc);
-    this.loc.add(this.vel);
-    // save location every 10 frames
-    if (frameCount % 10 == 0 && this.counter < n) { // pend
-        this.hist.push(this.loc.copy());
-      if (this.counter < 10) {
-        this.counter++;
-      }
-    }
-  }
-
-  // draw particle
-  this.draw = function() {
-    fill(255,50);
-    this.drawArrowHead(this.vel,this.loc,10);
-    noFill();
-    // draw history path
-    stroke(255, 100);
-    beginShape();
-    for (var i=this.hist.length-this.counter; i < this.hist.length; i++) {
-      vertex(this.hist[i].x,this.hist[i].y);
-    }
-    if (this.counter > 0) vertex(this.loc.x, this.loc.y);
-    endShape();
-  }
-  
-  
-   this.drawArrowHead = function(v, loc, scale) {
-    push();
-    var arrowsize = 8;
-    // Translate to location to render vector
-    translate(loc.x, loc.y);
-    
-    // rotate to heading
-    rotate(v.heading());
-
-    // Calculate length of vector & scale it to be bigger or smaller if necessary
-    var len = v.mag()*scale;
-    arrowsize = map(len, 0, 10, 0, 1) * arrowsize;
-
-    // Draw point
-    stroke(255, 100);
-    fill(255, 100);
-    line(0,0,len-arrowsize,0);
-    noStroke();
-    beginShape();
-    vertex(len,0);
-    vertex(len-arrowsize,+arrowsize/2);
-    vertex(len-arrowsize,-arrowsize/2);
-    endShape(CLOSE);
-    pop();
+ 
+function mousePressed() {
+  for(var i=0; i<all.length; i++) {
+    all[i].c = 0;
   }
 }
-  
