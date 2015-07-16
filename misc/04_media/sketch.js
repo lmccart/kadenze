@@ -3,7 +3,7 @@ var thumb_w;
 var draw_position_x = 0; 
 var center;
 
-var files = ['../assets/horse.jpg', '../assets/ballerina.jpg', '../assets/monkey.jpg', '../assets/camel.jpg'];
+var files = ['../assets/horse.jpg'];
 var imgs = [];
 var cur = 0;
 
